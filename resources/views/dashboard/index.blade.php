@@ -133,6 +133,7 @@
                 <table class="w-full text-left text-xs">
                     <thead class="bg-slate-50/80 text-slate-500 uppercase tracking-wider font-semibold border-b border-slate-100">
                         <tr>
+                            <th class="px-6 py-3 w-16 text-center">Cover</th>
                             <th class="px-6 py-3">Kode SKU</th>
                             <th class="px-6 py-3">Judul Buku / Produk</th>
                             <th class="px-6 py-3">Kategori</th>
@@ -145,6 +146,11 @@
                     <tbody class="divide-y divide-slate-100 font-medium text-slate-700">
                         @foreach($lowStockProducts as $lowItem)
                             <tr class="hover:bg-amber-50/30 transition-colors">
+                                <td class="px-6 py-2.5 text-center">
+                                    <img src="{{ $lowItem->image_url ?: asset('images/products/default-book.svg') }}" 
+                                         alt="{{ $lowItem->name }}" 
+                                         class="w-9 h-12 object-cover rounded-md mx-auto shadow-xs border border-slate-200">
+                                </td>
                                 <td class="px-6 py-3 font-mono font-bold text-slate-900">{{ $lowItem->sku }}</td>
                                 <td class="px-6 py-3 font-semibold text-slate-900">{{ $lowItem->name }}</td>
                                 <td class="px-6 py-3 text-slate-500">{{ $lowItem->category->name ?? '-' }}</td>

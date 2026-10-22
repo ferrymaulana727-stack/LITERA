@@ -11,7 +11,7 @@
             <p class="text-xs text-slate-500 mt-1">Ubah harga, kategori, atau kuota batas minimum stok barang.</p>
         </div>
 
-        <form action="{{ route('products.update', $product) }}" method="POST" class="space-y-4">
+        <form action="{{ route('products.update', $product) }}" method="POST" enctype="multipart/form-data" class="space-y-4">
             @csrf
             @method('PUT')
 
@@ -46,6 +46,23 @@
                 <input type="text" id="name" name="name" value="{{ old('name', $product->name) }}" required
                        class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm text-slate-900 focus:outline-none focus:border-red-500 focus:bg-white transition-all">
                 @error('name')
+                    <p class="text-xs text-rose-600 mt-1.5">{{ $message }}</p>
+                @enderror
+            </div>
+
+            <div>
+                <label for="image" class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">Foto / Cover Buku</label>
+                <div class="flex items-center gap-4">
+                    <img src="{{ $product->image_url ?: asset('images/products/default-book.svg') }}" 
+                         alt="{{ $product->name }}" 
+                         class="w-12 h-16 object-cover rounded-lg shadow-xs border border-slate-200 shrink-0">
+                    <div class="flex-1">
+                        <input type="file" id="image" name="image" accept="image/*"
+                               class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2 text-xs text-slate-600 file:mr-4 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-red-50 file:text-red-700 hover:file:bg-red-100 transition-all">
+                        <p class="text-[11px] text-slate-400 mt-1">Kosongkan jika tidak ingin mengubah cover yang ada.</p>
+                    </div>
+                </div>
+                @error('image')
                     <p class="text-xs text-rose-600 mt-1.5">{{ $message }}</p>
                 @enderror
             </div>

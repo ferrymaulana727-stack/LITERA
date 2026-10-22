@@ -71,14 +71,12 @@
     <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-5">
         @forelse($products as $prod)
             <div class="bg-white rounded-2xl border border-slate-200/90 shadow-xs hover:shadow-md hover:border-slate-300 transition-all flex flex-col justify-between overflow-hidden group">
-                <!-- Book Card Cover Placeholder -->
-                <div class="relative bg-gradient-to-b from-slate-100 to-slate-200 aspect-[4/3] flex items-center justify-center p-3 text-center border-b border-slate-100">
-                    <div class="space-y-1">
-                        <div class="w-10 h-10 mx-auto rounded-xl bg-white shadow-xs flex items-center justify-center text-red-600 font-black text-xs">
-                            📖
-                        </div>
-                        <span class="text-[10px] font-mono text-slate-400 block">{{ $prod->sku }}</span>
-                    </div>
+                <!-- Book Card Cover Image -->
+                <div class="relative bg-slate-100 aspect-[3/4] overflow-hidden border-b border-slate-100 flex items-center justify-center">
+                    <img src="{{ $prod->image_url ?: asset('images/products/default-book.svg') }}" 
+                         alt="{{ $prod->name }}" 
+                         loading="lazy"
+                         class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
 
                     <!-- Stock Status Badge -->
                     <div class="absolute top-2.5 right-2.5">
@@ -91,7 +89,7 @@
                                 Sisa {{ $prod->stock }}!
                             </span>
                         @else
-                            <span class="px-2 py-0.5 rounded-full text-[9px] font-bold bg-emerald-100 text-emerald-800">
+                            <span class="px-2 py-0.5 rounded-full text-[9px] font-bold bg-emerald-100 text-emerald-800 backdrop-blur-xs">
                                 Stok: {{ $prod->stock }}
                             </span>
                         @endif
@@ -220,9 +218,12 @@
             <div class="flex-1 py-4 divide-y divide-slate-100 overflow-y-auto space-y-3">
                 @foreach($cart as $pId => $item)
                     <div class="pt-3 first:pt-0 flex items-start justify-between gap-3">
+                        <img src="{{ $item['image_url'] ?? asset('images/products/default-book.svg') }}" 
+                             alt="{{ $item['name'] }}" 
+                             class="w-12 h-16 object-cover rounded-lg shrink-0 shadow-xs border border-slate-100">
                         <div class="flex-1">
                             <span class="text-[10px] text-slate-400 font-mono">{{ $item['sku'] }}</span>
-                            <h4 class="text-xs font-bold text-slate-900">{{ $item['name'] }}</h4>
+                            <h4 class="text-xs font-bold text-slate-900 line-clamp-1">{{ $item['name'] }}</h4>
                             <span class="text-xs font-mono font-bold text-red-600 block mt-0.5">
                                 Rp {{ number_format($item['price'], 0, ',', '.') }}
                             </span>

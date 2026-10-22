@@ -11,7 +11,7 @@
             <p class="text-xs text-slate-500 mt-1">Lengkapi data buku atau perlengkapan kantor untuk didaftarkan ke sistem inventori.</p>
         </div>
 
-        <form action="{{ route('products.store') }}" method="POST" class="space-y-4">
+        <form action="{{ route('products.store') }}" method="POST" enctype="multipart/form-data" class="space-y-4">
             @csrf
 
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -48,6 +48,16 @@
                        placeholder="Contoh: Cantik Itu Luka - Eka Kurniawan"
                        class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm text-slate-900 focus:outline-none focus:border-red-500 focus:bg-white transition-all">
                 @error('name')
+                    <p class="text-xs text-rose-600 mt-1.5">{{ $message }}</p>
+                @enderror
+            </div>
+
+            <div>
+                <label for="image" class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">Foto / Cover Buku (Opsional)</label>
+                <input type="file" id="image" name="image" accept="image/*"
+                       class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2 text-xs text-slate-600 file:mr-4 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-red-50 file:text-red-700 hover:file:bg-red-100 transition-all">
+                <p class="text-[11px] text-slate-400 mt-1">Format: JPG, PNG, WEBP, atau SVG (Maks. 2MB). Jika dikosongkan, cover standar akan digunakan.</p>
+                @error('image')
                     <p class="text-xs text-rose-600 mt-1.5">{{ $message }}</p>
                 @enderror
             </div>

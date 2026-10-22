@@ -79,6 +79,7 @@
                 <thead class="bg-slate-50/80 text-slate-500 uppercase tracking-wider font-semibold border-b border-slate-100">
                     <tr>
                         <th class="px-5 py-3.5 w-14 text-center">No</th>
+                        <th class="px-5 py-3.5 w-16 text-center">Cover</th>
                         <th class="px-5 py-3.5">Kode SKU / ISBN</th>
                         <th class="px-5 py-3.5">Judul Buku / Nama Barang</th>
                         <th class="px-5 py-3.5">Kategori</th>
@@ -93,6 +94,11 @@
                     @forelse($products as $index => $prod)
                         <tr class="hover:bg-slate-50/50 transition-colors {{ $prod->isLowStock() ? 'bg-amber-50/20' : '' }}">
                             <td class="px-5 py-4 text-center text-slate-400 font-mono">{{ $products->firstItem() + $index }}</td>
+                            <td class="px-5 py-3 text-center">
+                                <img src="{{ $prod->image_url ?: asset('images/products/default-book.svg') }}" 
+                                     alt="{{ $prod->name }}" 
+                                     class="w-10 h-14 object-cover rounded-md mx-auto shadow-xs border border-slate-200">
+                            </td>
                             <td class="px-5 py-4 font-mono font-bold text-slate-900">{{ $prod->sku }}</td>
                             <td class="px-5 py-4">
                                 <a href="{{ route('products.show', $prod) }}" class="font-bold text-slate-900 hover:text-red-600 transition-colors text-sm block">
@@ -154,7 +160,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="9" class="px-6 py-12 text-center text-slate-400">
+                            <td colspan="10" class="px-6 py-12 text-center text-slate-400">
                                 Tidak ada produk yang sesuai dengan kriteria pencarian atau filter.
                             </td>
                         </tr>

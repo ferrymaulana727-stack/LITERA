@@ -58,6 +58,7 @@ class ProductController extends Controller
             'category_id' => ['required', 'exists:categories,id'],
             'sku' => ['required', 'string', 'max:50', 'unique:products,sku'],
             'name' => ['required', 'string', 'max:255'],
+            'image' => ['nullable', 'image', 'mimes:jpeg,png,jpg,gif,svg,webp', 'max:2048'],
             'purchase_price' => ['required', 'numeric', 'min:0'],
             'selling_price' => ['required', 'numeric', 'min:0'],
             'stock' => ['required', 'integer', 'min:0'],
@@ -66,7 +67,12 @@ class ProductController extends Controller
             'sku.unique' => 'Kode SKU / ISBN ini sudah digunakan.',
             'category_id.required' => 'Pilih kategori buku / ATK.',
             'name.required' => 'Judul buku / nama barang wajib diisi.',
+            'image.image' => 'File harus berupa gambar valid.',
         ]);
+
+        if ($request->hasFile('image')) {
+            $validated['image'] = $request->file('image')->store('products', 'public');
+        }
 
         Product::create($validated);
 
@@ -96,6 +102,7 @@ class ProductController extends Controller
             'category_id' => ['required', 'exists:categories,id'],
             'sku' => ['required', 'string', 'max:50', Rule::unique('products', 'sku')->ignore($product->id)],
             'name' => ['required', 'string', 'max:255'],
+            'image' => ['nullable', 'image', 'mimes:jpeg,png,jpg,gif,svg,webp', 'max:2048'],
             'purchase_price' => ['required', 'numeric', 'min:0'],
             'selling_price' => ['required', 'numeric', 'min:0'],
             'stock' => ['required', 'integer', 'min:0'],
@@ -104,7 +111,12 @@ class ProductController extends Controller
             'sku.unique' => 'Kode SKU / ISBN ini sudah digunakan.',
             'category_id.required' => 'Pilih kategori buku / ATK.',
             'name.required' => 'Judul buku / nama barang wajib diisi.',
+            'image.image' => 'File harus berupa gambar valid.',
         ]);
+
+        if ($request->hasFile('image')) {
+            $validated['image'] = $request->file('image')->store('products', 'public');
+        }
 
         $product->update($validated);
 

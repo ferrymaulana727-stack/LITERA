@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 560" width="400" height="560">
+  <defs>
+    <linearGradient id="sepiaBg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#2c1810"/>
+      <stop offset="50%" stop-color="#4a2c1d"/>
+      <stop offset="100%" stop-color="#1f110b"/>
+    </linearGradient>
+    <linearGradient id="vintageGold" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#dfba73"/>
+      <stop offset="50%" stop-color="#f5e1a4"/>
+      <stop offset="100%" stop-color="#c99e4b"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Background -->
+  <rect width="400" height="560" rx="16" fill="url(#sepiaBg)"/>
+
+  <!-- Vintage border frame -->
+  <rect x="35" y="25" width="345" height="510" rx="4" fill="none" stroke="#dfba73" stroke-width="1.5" opacity="0.4"/>
+  <rect x="42" y="32" width="331" height="496" rx="2" fill="none" stroke="#dfba73" stroke-width="0.8" opacity="0.3"/>
+
+  <!-- Spine effect -->
+  <rect x="0" y="0" width="22" height="560" fill="#150a06" opacity="0.7"/>
+  <line x1="22" y1="0" x2="22" y2="560" stroke="#5a3825" stroke-width="1.5"/>
+
+  <!-- Series Badge Top -->
+  <text x="215" y="70" fill="#dfba73" font-family="'Plus Jakarta Sans', serif" font-size="11" font-weight="700" text-anchor="middle" letter-spacing="4">TETRALOGI BURU &bull; BUKU KE-1</text>
+  <line x1="100" y1="85" x2="330" y2="85" stroke="#dfba73" stroke-width="1" opacity="0.4"/>
+
+  <!-- Author Name -->
+  <text x="215" y="160" fill="#f5e1a4" font-family="'Plus Jakarta Sans', serif" font-size="16" font-weight="600" text-anchor="middle" letter-spacing="3">PRAMOEDYA ANANTA TOER</text>
+
+  <!-- Book Title -->
+  <text x="215" y="235" fill="url(#vintageGold)" font-family="'Plus Jakarta Sans', serif" font-size="36" font-weight="900" text-anchor="middle" letter-spacing="2">BUMI</text>
+  <text x="215" y="278" fill="url(#vintageGold)" font-family="'Plus Jakarta Sans', serif" font-size="34" font-weight="900" text-anchor="middle" letter-spacing="3">MANUSIA</text>
+
+  <!-- Vintage Emblem Ornament -->
+  <g transform="translate(215, 360)">
+    <circle cx="0" cy="0" r="48" fill="#1f110b" stroke="#dfba73" stroke-width="1.5"/>
+    <circle cx="0" cy="0" r="42" fill="none" stroke="#dfba73" stroke-width="0.8" stroke-dasharray="3,3"/>
+    <!-- Quill / Fountain pen icon -->
+    <path d="M -8,18 L 8,18 L 4,-18 L 0,-24 L -4,-18 Z" fill="#dfba73"/>
+    <circle cx="0" cy="-6" r="2" fill="#1f110b"/>
+  </g>
+
+  <!-- Subtitle Quote -->
+  <text x="215" y="450" fill="#c4a58b" font-family="'Plus Jakarta Sans', serif" font-style="italic" font-size="11" text-anchor="middle">
+    "Suatu karya sastra klasik Indonesia paling fenomenal"
+  </text>
+
+  <!-- Footer SKU -->
+  <text x="215" y="505" fill="#8c6a51" font-family="monospace" font-size="10" text-anchor="middle" letter-spacing="2">SKU: BKU-NVL-02 | GRAMEDIA</text>
+</svg>

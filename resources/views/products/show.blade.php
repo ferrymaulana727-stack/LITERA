@@ -27,15 +27,20 @@
     <!-- Product Details Card -->
     <div class="bg-white rounded-2xl border border-slate-200/80 shadow-xs p-6 md:p-8">
         <div class="flex flex-col md:flex-row md:items-start justify-between gap-6 pb-6 border-b border-slate-100">
-            <div>
-                <span class="inline-flex px-2.5 py-1 rounded-full text-xs font-bold bg-slate-100 text-slate-700 mb-2">
-                    {{ $product->category->name ?? 'Tanpa Kategori' }}
-                </span>
-                <h2 class="text-xl md:text-2xl font-black text-slate-900">{{ $product->name }}</h2>
-                <p class="text-xs font-mono text-slate-400 mt-1">SKU / ISBN: <strong class="text-slate-700">{{ $product->sku }}</strong></p>
+            <div class="flex items-start gap-5">
+                <img src="{{ $product->image_url ?: asset('images/products/default-book.svg') }}" 
+                     alt="{{ $product->name }}" 
+                     class="w-24 sm:w-28 h-32 sm:h-36 object-cover rounded-xl shadow-md border border-slate-200 shrink-0">
+                <div>
+                    <span class="inline-flex px-2.5 py-1 rounded-full text-xs font-bold bg-slate-100 text-slate-700 mb-2">
+                        {{ $product->category->name ?? 'Tanpa Kategori' }}
+                    </span>
+                    <h2 class="text-xl md:text-2xl font-black text-slate-900">{{ $product->name }}</h2>
+                    <p class="text-xs font-mono text-slate-400 mt-1">SKU / ISBN: <strong class="text-slate-700">{{ $product->sku }}</strong></p>
+                </div>
             </div>
 
-            <div class="flex md:flex-col items-end gap-2">
+            <div class="flex md:flex-col items-end gap-2 shrink-0">
                 <div class="text-right">
                     <span class="text-xs text-slate-400 block">Harga Jual Konsumen</span>
                     <span class="text-2xl font-black text-red-600">Rp {{ number_format($product->selling_price, 0, ',', '.') }}</span>

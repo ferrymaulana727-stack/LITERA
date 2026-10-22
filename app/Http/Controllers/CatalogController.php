@@ -75,6 +75,7 @@ class CatalogController extends Controller
             'id' => $product->id,
             'sku' => $product->sku,
             'name' => $product->name,
+            'image_url' => $product->image_url ?: asset('images/products/default-book.svg'),
             'price' => (float)$product->selling_price,
             'quantity' => $newQty,
             'category_name' => $product->category->name ?? '-',

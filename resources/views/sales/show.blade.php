@@ -101,7 +101,14 @@
                             <tr>
                                 <td class="px-4 py-3 text-center text-slate-400">{{ $idx + 1 }}</td>
                                 <td class="px-4 py-3 font-mono font-bold text-slate-900">{{ $item->product->sku ?? '-' }}</td>
-                                <td class="px-4 py-3 font-semibold text-slate-900">{{ $item->product->name ?? 'Produk Dihapus' }}</td>
+                                <td class="px-4 py-3">
+                                    <div class="flex items-center gap-3">
+                                        <img src="{{ $item->product ? ($item->product->image_url ?: asset('images/products/default-book.svg')) : asset('images/products/default-book.svg') }}" 
+                                             alt="{{ $item->product->name ?? 'Buku' }}" 
+                                             class="w-8 h-11 object-cover rounded shadow-xs border border-slate-200 shrink-0">
+                                        <span class="font-semibold text-slate-900">{{ $item->product->name ?? 'Produk Dihapus' }}</span>
+                                    </div>
+                                </td>
                                 <td class="px-4 py-3 text-center font-bold font-mono">{{ $item->quantity }} pcs</td>
                                 <td class="px-4 py-3 text-right font-mono text-slate-600">Rp {{ number_format($item->unit_price, 0, ',', '.') }}</td>
                                 <td class="px-4 py-3 text-right font-mono font-bold text-slate-900">Rp {{ number_format($item->subtotal, 0, ',', '.') }}</td>

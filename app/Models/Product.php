@@ -17,11 +17,27 @@ class Product extends Model
         'category_id',
         'sku',
         'name',
+        'image',
         'purchase_price',
         'selling_price',
         'stock',
         'minimum_stock',
     ];
+
+    public function getImageUrlAttribute(): string
+    {
+        if ($this->image) {
+            if (str_starts_with($this->image, 'http://') || str_starts_with($this->image, 'https://')) {
+                return $this->image;
+            }
+            if (str_starts_with($this->image, 'images/')) {
+                return asset($this->image);
+            }
+            return asset('storage/' . $this->image);
+        }
+
+        return '';
+    }
 
     protected function casts(): array
     {
