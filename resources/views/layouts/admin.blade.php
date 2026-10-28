@@ -113,11 +113,21 @@
                 <span>Supplier / Penerbit</span>
             </a>
 
-            <a href="{{ route('products.index') }}" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors {{ request()->routeIs('products.*') ? 'bg-red-700 text-white shadow-sm' : 'hover:bg-slate-900 text-slate-300 hover:text-white' }}">
+            <a href="{{ route('products.index') }}" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors {{ request()->routeIs('products.*') && request('stock_status') !== 'low' ? 'bg-red-700 text-white shadow-sm' : 'hover:bg-slate-900 text-slate-300 hover:text-white' }}">
                 <svg class="w-5 h-5 shrink-0 opacity-80" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
                 </svg>
                 <span>Produk (Buku & ATK)</span>
+            </a>
+
+            <a href="{{ route('products.index', ['stock_status' => 'low']) }}" class="flex items-center justify-between px-3 py-2.5 rounded-lg text-sm font-medium transition-colors {{ request('stock_status') === 'low' ? 'bg-amber-600 text-white shadow-sm' : 'hover:bg-slate-900 text-amber-400 hover:text-amber-300' }}">
+                <div class="flex items-center gap-3">
+                    <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
+                    </svg>
+                    <span>Stok Rendah (&le; Min)</span>
+                </div>
+                <span class="w-2 h-2 rounded-full bg-amber-400 animate-pulse"></span>
             </a>
 
             <div class="pt-4 px-2 pb-1 text-[11px] font-bold tracking-wider text-slate-400 uppercase">Transaksi Inventori</div>

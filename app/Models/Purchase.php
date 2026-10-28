@@ -43,6 +43,11 @@ class Purchase extends Model
         return $this->hasMany(PurchaseItem::class);
     }
 
+    public function purchaseItems(): HasMany
+    {
+        return $this->hasMany(PurchaseItem::class);
+    }
+
     public function isCancelled(): bool
     {
         return $this->status === 'cancelled';

@@ -40,10 +40,10 @@
         </div>
     </div>
 
-    <!-- Aggregate Stats Cards (Count & Sum) -->
+    <!-- Aggregate Stats Cards (Count & Sum) - Modul Slide 18 -->
     <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
         <!-- Total Produk -->
-        <div class="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-xs">
+        <a href="{{ route('products.index') }}" class="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-xs hover:border-slate-300 transition-all block">
             <div class="flex items-center justify-between text-slate-500 text-xs font-semibold uppercase tracking-wider mb-2">
                 <span>Total Item Produk</span>
                 <div class="w-8 h-8 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center">
@@ -54,10 +54,10 @@
             </div>
             <div class="text-2xl md:text-3xl font-extrabold text-slate-900">{{ number_format($totalProducts) }}</div>
             <p class="text-xs text-slate-500 mt-1">{{ $totalCategories }} Kategori terdaftar</p>
-        </div>
+        </a>
 
-        <!-- Stok Rendah Warning Card -->
-        <div class="bg-white p-5 rounded-2xl border {{ $lowStockCount > 0 ? 'border-amber-300 bg-amber-50/20' : 'border-slate-200/80' }} shadow-xs">
+        <!-- Stok Rendah Warning Card (Slide 13 & 18) -->
+        <a href="{{ route('products.index', ['stock_status' => 'low']) }}" class="bg-white p-5 rounded-2xl border {{ $lowStockCount > 0 ? 'border-amber-300 bg-amber-50/20 hover:border-amber-400' : 'border-slate-200/80 hover:border-slate-300' }} shadow-xs transition-all block">
             <div class="flex items-center justify-between text-slate-500 text-xs font-semibold uppercase tracking-wider mb-2">
                 <span>Peringatan Stok Rendah</span>
                 <div class="w-8 h-8 rounded-lg {{ $lowStockCount > 0 ? 'bg-amber-100 text-amber-700' : 'bg-slate-100 text-slate-600' }} flex items-center justify-center">
@@ -70,12 +70,12 @@
                 {{ number_format($lowStockCount) }}
             </div>
             <p class="text-xs {{ $lowStockCount > 0 ? 'text-amber-700 font-medium' : 'text-slate-500' }} mt-1">
-                {{ $lowStockCount > 0 ? 'Perlu kulakan ulang segera' : 'Semua stok aman' }}
+                {{ $lowStockCount > 0 ? 'Lihat daftar stok rendah &rarr;' : 'Semua stok aman' }}
             </p>
-        </div>
+        </a>
 
         <!-- Total Transaksi Penjualan -->
-        <div class="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-xs">
+        <a href="{{ route('sales.index') }}" class="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-xs hover:border-slate-300 transition-all block">
             <div class="flex items-center justify-between text-slate-500 text-xs font-semibold uppercase tracking-wider mb-2">
                 <span>Total Nota Penjualan</span>
                 <div class="w-8 h-8 rounded-lg bg-emerald-50 text-emerald-600 flex items-center justify-center">
@@ -86,13 +86,12 @@
             </div>
             <div class="text-2xl md:text-3xl font-extrabold text-slate-900">{{ number_format($totalSalesCount) }}</div>
             <p class="text-xs text-slate-500 mt-1">Transaksi sukses terbit</p>
-        </div>
+        </a>
 
-        <!-- Omzet (Admin) / Nota Kulakan (Staff) -->
-        @if(auth()->user()->isAdmin())
+        <!-- Omzet Kumulatif -->
         <div class="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-xs">
             <div class="flex items-center justify-between text-slate-500 text-xs font-semibold uppercase tracking-wider mb-2">
-                <span>Omzet Penjualan</span>
+                <span>Total Omzet Bersih</span>
                 <div class="w-8 h-8 rounded-lg bg-red-50 text-red-600 flex items-center justify-center">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"></path>
@@ -100,22 +99,37 @@
                 </div>
             </div>
             <div class="text-xl md:text-2xl font-black text-red-700">Rp {{ number_format($totalRevenue, 0, ',', '.') }}</div>
-            <p class="text-xs text-slate-500 mt-1">Total pendapatan bersih</p>
+            <p class="text-xs text-slate-500 mt-1">Akumulasi seluruh penjualan</p>
         </div>
-        @else
-        <div class="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-xs">
-            <div class="flex items-center justify-between text-slate-500 text-xs font-semibold uppercase tracking-wider mb-2">
-                <span>Nota Kulakan (Stock-In)</span>
-                <div class="w-8 h-8 rounded-lg bg-indigo-50 text-indigo-600 flex items-center justify-center">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path>
-                    </svg>
-                </div>
+    </div>
+
+    <!-- Ringkasan Penjualan Hari Ini & Bulan Ini (Slide 18) -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div class="bg-gradient-to-br from-white to-slate-50 p-5 rounded-2xl border border-slate-200/80 shadow-xs flex items-center justify-between">
+            <div>
+                <div class="text-xs font-bold text-slate-500 uppercase tracking-wider">Penjualan Hari Ini</div>
+                <div class="text-xl md:text-2xl font-black text-slate-900 mt-1">Rp {{ number_format($salesTodayRevenue, 0, ',', '.') }}</div>
+                <p class="text-xs text-slate-500 mt-1"><span class="font-bold text-emerald-600">{{ $salesTodayCount }}</span> transaksi hari ini ({{ now()->translatedFormat('d M Y') }})</p>
             </div>
-            <div class="text-2xl md:text-3xl font-extrabold text-slate-900">{{ number_format($totalPurchasesCount) }}</div>
-            <p class="text-xs text-slate-500 mt-1">Total pengadaan buku</p>
+            <div class="w-12 h-12 rounded-xl bg-red-50 text-red-600 flex items-center justify-center shrink-0">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                </svg>
+            </div>
         </div>
-        @endif
+        <div class="bg-gradient-to-br from-white to-slate-50 p-5 rounded-2xl border border-slate-200/80 shadow-xs flex items-center justify-between">
+            <div>
+                <div class="text-xs font-bold text-slate-500 uppercase tracking-wider">Penjualan Bulan Ini</div>
+                <div class="text-xl md:text-2xl font-black text-slate-900 mt-1">Rp {{ number_format($salesMonthRevenue, 0, ',', '.') }}</div>
+                <p class="text-xs text-slate-500 mt-1"><span class="font-bold text-blue-600">{{ $salesMonthCount }}</span> transaksi pada {{ now()->translatedFormat('F Y') }}</p>
+            </div>
+            <div class="w-12 h-12 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center shrink-0">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+                </svg>
+            </div>
+        </div>
+    </div>
     </div>
 
     <!-- Low-Stock Alert Table (Wajib di Blueprint Modul) -->

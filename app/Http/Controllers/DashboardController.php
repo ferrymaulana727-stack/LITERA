@@ -7,6 +7,7 @@ use App\Models\Product;
 use App\Models\Purchase;
 use App\Models\Sale;
 use App\Models\Supplier;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
@@ -16,7 +17,7 @@ class DashboardController extends Controller
     {
         $user = $request->user();
 
-        // Database aggregate queries required by blueprint
+        // Database aggregate queries required by PPT Slide 18 & Blueprint
         $totalProducts = Product::count();
         $totalCategories = Category::count();
         $totalSuppliers = Supplier::count();
@@ -27,6 +28,29 @@ class DashboardController extends Controller
 
         $totalSalesCount = Sale::where('status', 'completed')->count();
         $totalRevenue = Sale::where('status', 'completed')->sum('total');
+
+        // Metrik Penjualan Hari Ini & Bulan Ini (Slide 18)
+        $today = Carbon::today();
+        $thisMonth = Carbon::now()->month;
+        $thisYear = Carbon::now()->year;
+
+        $salesTodayRevenue = Sale::where('status', 'completed')
+            ->whereDate('sold_at', $today)
+            ->sum('total');
+
+        $salesTodayCount = Sale::where('status', 'completed')
+            ->whereDate('sold_at', $today)
+            ->count();
+
+        $salesMonthRevenue = Sale::where('status', 'completed')
+            ->whereMonth('sold_at', $thisMonth)
+            ->whereYear('sold_at', $thisYear)
+            ->sum('total');
+
+        $salesMonthCount = Sale::where('status', 'completed')
+            ->whereMonth('sold_at', $thisMonth)
+            ->whereYear('sold_at', $thisYear)
+            ->count();
 
         $totalPurchasesCount = Purchase::where('status', 'completed')->count();
         $totalExpense = Purchase::where('status', 'completed')->sum('total');
@@ -50,6 +74,10 @@ class DashboardController extends Controller
             'lowStockProducts',
             'totalSalesCount',
             'totalRevenue',
+            'salesTodayRevenue',
+            'salesTodayCount',
+            'salesMonthRevenue',
+            'salesMonthCount',
             'totalPurchasesCount',
             'totalExpense',
             'recentSales',

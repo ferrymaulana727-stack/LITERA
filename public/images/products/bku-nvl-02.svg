@@ -24,7 +24,7 @@
   <line x1="22" y1="0" x2="22" y2="560" stroke="#5a3825" stroke-width="1.5"/>
 
   <!-- Series Badge Top -->
-  <text x="215" y="70" fill="#dfba73" font-family="'Plus Jakarta Sans', serif" font-size="11" font-weight="700" text-anchor="middle" letter-spacing="4">TETRALOGI BURU &bull; BUKU KE-1</text>
+  <text x="215" y="70" fill="#dfba73" font-family="'Plus Jakarta Sans', serif" font-size="11" font-weight="700" text-anchor="middle" letter-spacing="4">TETRALOGI BURU &#8226; BUKU KE-1</text>
   <line x1="100" y1="85" x2="330" y2="85" stroke="#dfba73" stroke-width="1" opacity="0.4"/>
 
   <!-- Author Name -->

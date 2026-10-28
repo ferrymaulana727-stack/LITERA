@@ -275,4 +275,127 @@ class GramediaStoreTest extends TestCase
         // Pastikan tidak di-hard delete (masih ada di database dengan deleted_at terisi)
         $this->assertSoftDeleted('products', ['id' => $product->id]);
     }
+
+    /**
+     * Skenario Slide 19: Guest tidak dapat membuka dashboard; password salah ditolak.
+     */
+    public function test_auth_guest_cannot_access_dashboard_and_wrong_password_rejected(): void
+    {
+        // 1. Guest akses dashboard harus ditolak / diarahkan ke login
+        $guestResponse = $this->get('/dashboard');
+        $guestResponse->assertRedirect('/login');
+
+        // 2. Login dengan password salah harus ditolak
+        $wrongLoginResponse = $this->post('/login', [
+            'email' => 'admin@gramedia.test',
+            'password' => 'wrong-password-123',
+        ]);
+        $wrongLoginResponse->assertSessionHasErrors('email');
+        $this->assertGuest();
+    }
+
+    /**
+     * Skenario Slide 19: SKU duplikat ditolak; harga negatif ditolak.
+     */
+    public function test_product_validation_duplicate_sku_and_negative_price_rejected(): void
+    {
+        $admin = User::where('role', 'admin')->first();
+        $category = Category::first();
+
+        // 1. SKU Duplikat ditolak
+        $duplicateResponse = $this->actingAs($admin)->post('/products', [
+            'category_id' => $category->id,
+            'sku' => 'BKU-NVL-01', // SKU ini sudah ada di seeder
+            'name' => 'Buku Duplikat Test',
+            'purchase_price' => 50000,
+            'selling_price' => 75000,
+            'stock' => 10,
+            'minimum_stock' => 5,
+        ]);
+        $duplicateResponse->assertSessionHasErrors('sku');
+
+        // 2. Harga negatif ditolak
+        $negativePriceResponse = $this->actingAs($admin)->post('/products', [
+            'category_id' => $category->id,
+            'sku' => 'BKU-NEW-99',
+            'name' => 'Buku Harga Negatif',
+            'purchase_price' => -10000,
+            'selling_price' => -20000,
+            'stock' => 10,
+            'minimum_stock' => 5,
+        ]);
+        $negativePriceResponse->assertSessionHasErrors(['purchase_price', 'selling_price']);
+    }
+
+    /**
+     * Skenario Slide 19: Atomicity - Jika satu item transaksi gagal, seluruh transaksi rollback.
+     */
+    public function test_sale_transaction_multi_item_atomicity_rollback(): void
+    {
+        $admin = User::where('role', 'admin')->first();
+
+        $product1 = Product::where('sku', 'BKU-NVL-01')->first(); // stock: 20
+        $product2 = Product::where('sku', 'BKU-TEK-01')->first(); // stock: 3
+
+        $initialStock1 = $product1->stock;
+        $initialStock2 = $product2->stock;
+
+        // Transaksi 2 item:
+        // Item 1: BKU-NVL-01 pesan 2 pcs (stok cukup)
+        // Item 2: BKU-TEK-01 pesan 10 pcs (stok TIDAK cukup, hanya ada 3)
+        $response = $this->actingAs($admin)->post('/sales', [
+            'items' => [
+                [
+                    'product_id' => $product1->id,
+                    'quantity' => 2,
+                ],
+                [
+                    'product_id' => $product2->id,
+                    'quantity' => 10,
+                ],
+            ],
+        ]);
+
+        $response->assertSessionHas('error');
+
+        // Verifikasi Atomicity: Item 1 yang tadinya cukup TIDAK boleh berkurang sama sekali
+        $product1->refresh();
+        $product2->refresh();
+        $this->assertEquals($initialStock1, $product1->stock, 'Stok item 1 tidak boleh berubah jika item 2 gagal.');
+        $this->assertEquals($initialStock2, $product2->stock, 'Stok item 2 tidak boleh berubah.');
+
+        // Verifikasi tidak ada nota yang tersimpan setengah-setengah
+        $this->assertDatabaseMissing('sales', [
+            'user_id' => $admin->id,
+            'total' => (2 * (float)$product1->selling_price) + (10 * (float)$product2->selling_price),
+        ]);
+    }
+
+    /**
+     * Skenario Slide 19: Search, filter dan pagination menghasilkan data yang sesuai.
+     */
+    public function test_search_and_filter_and_pagination(): void
+    {
+        $admin = User::where('role', 'admin')->first();
+
+        // 1. Pencarian berdasarkan SKU
+        $searchResponse = $this->actingAs($admin)->get('/products?search=BKU-TEK-01');
+        $searchResponse->assertStatus(200);
+        $searchResponse->assertSee('Mastering Laravel 11');
+        $searchResponse->assertDontSee('Laut Bercerita');
+
+        // 2. Filter Kategori
+        $category = Category::where('name', 'Buku Komputer & Pemrograman')->first();
+        $filterCategoryResponse = $this->actingAs($admin)->get("/products?category_id={$category->id}");
+        $filterCategoryResponse->assertStatus(200);
+        $filterCategoryResponse->assertSee('Mastering Laravel 11');
+        $filterCategoryResponse->assertDontSee('Laut Bercerita');
+
+        // 3. Filter Stok Rendah
+        $lowStockResponse = $this->actingAs($admin)->get('/products?stock_status=low');
+        $lowStockResponse->assertStatus(200);
+        $lowStockResponse->assertSee('Mastering Laravel 11'); // stock 3 <= min 5
+        $lowStockResponse->assertSee('Paket Pulpen Gel Sarasa'); // stock 4 <= min 6
+        $lowStockResponse->assertDontSee('Laut Bercerita'); // stock 20 > min 5
+    }
 }

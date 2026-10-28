@@ -37,6 +37,11 @@ class Sale extends Model
         return $this->hasMany(SaleItem::class);
     }
 
+    public function saleItems(): HasMany
+    {
+        return $this->hasMany(SaleItem::class);
+    }
+
     public function isCancelled(): bool
     {
         return $this->status === 'cancelled';
